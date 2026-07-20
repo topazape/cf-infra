@@ -24,9 +24,3 @@ resource "cloudflare_pages_domain" "apex" {
   project_name = cloudflare_pages_project.blog.name
   name         = "topazape.dev"
 }
-
-resource "cloudflare_pages_domain" "www" {
-  account_id   = local.account_id
-  project_name = cloudflare_pages_project.blog.name
-  name         = "www.topazape.dev"
-}
