@@ -11,7 +11,7 @@ resource "cloudflare_pipeline_stream" "shop" {
     enabled        = true
     authentication = true
   }
-  worker_binding = { enabled = false }
+  worker_binding = { enabled = false } // TODO: Worker から bind できるように、Worker 開発時に true に変更する
 
   format = { type = "json" }
 
@@ -48,10 +48,19 @@ resource "cloudflare_pipeline_sink" "shop" {
     token          = var.laundry_tokyo_catalog_token
     rolling_policy = { interval_seconds = 300 }
   }
+
+  depends_on = [
+    cloudflare_r2_data_catalog.laundry_tokyo
+  ]
 }
 
 resource "cloudflare_pipeline" "shop" {
   account_id = local.account_id
   name       = "laundry_tokyo_shop"
   sql        = "INSERT INTO laundry_tokyo_shop_sink SELECT * FROM laundry_tokyo_shop;"
+
+  depends_on = [
+    cloudflare_pipeline_stream.shop,
+    cloudflare_pipeline_sink.shop
+  ]
 }
