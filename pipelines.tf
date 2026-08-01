@@ -40,6 +40,9 @@ resource "cloudflare_pipeline_sink" "shop" {
   name       = "laundry_tokyo_shop_sink"
   type       = "r2_data_catalog"
 
+  format = { type = "parquet" }
+  schema = { fields = [] }
+
   config = {
     account_id     = local.account_id
     bucket         = cloudflare_r2_bucket.laundry_tokyo.name
