@@ -10,6 +10,7 @@ resource "cloudflare_pipeline_stream" "shop" {
   http = {
     enabled        = true
     authentication = true
+    cors           = {}
   }
   worker_binding = { enabled = false } // TODO: Worker から bind できるように、Worker 開発時に true に変更する
 
