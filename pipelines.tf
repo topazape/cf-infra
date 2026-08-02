@@ -12,7 +12,7 @@ resource "cloudflare_pipeline_stream" "shop" {
     authentication = true
     cors           = {}
   }
-  worker_binding = { enabled = false } // TODO: Worker から bind できるように、Worker 開発時に true に変更する
+  worker_binding = { enabled = false }
 
   format = { type = "json" }
 
