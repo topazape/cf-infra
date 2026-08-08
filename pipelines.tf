@@ -41,10 +41,7 @@ resource "cloudflare_pipeline_sink" "shop" {
   name       = "laundry_tokyo_shop_sink"
   type       = "r2_data_catalog"
 
-  format = {
-    type        = "parquet",
-    compression = "zstd"
-  }
+  format = { type = "parquet" }
   schema = { fields = [] }
 
   config = {
