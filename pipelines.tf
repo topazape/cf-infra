@@ -41,7 +41,10 @@ resource "cloudflare_pipeline_sink" "shop" {
   name       = "laundry_tokyo_shop_sink"
   type       = "r2_data_catalog"
 
-  format = { type = "parquet" }
+  format = {
+    type        = "parquet",
+    compression = "zstd"
+  }
   schema = { fields = [] }
 
   config = {
@@ -66,5 +69,67 @@ resource "cloudflare_pipeline" "shop" {
   depends_on = [
     cloudflare_pipeline_stream.shop,
     cloudflare_pipeline_sink.shop
+  ]
+}
+
+resource "cloudflare_pipeline_stream" "obs" {
+  account_id = local.account_id
+  name       = "laundry_tokyo_obs"
+
+  http = {
+    enabled        = true
+    authentication = true
+    cors           = {}
+  }
+  worker_binding = { enabled = false }
+
+  format = { type = "json" }
+
+  schema = {
+    fields = [
+      { name = "shop_id", type = "string", required = true },
+      { name = "machine_id", type = "string", required = true },
+      { name = "status", type = "string", required = true },
+      { name = "status_code", type = "string", required = false },
+      { name = "remaining_minutes", type = "string", required = false },
+      { name = "course_code", type = "string", required = false },
+      { name = "fetched_at", type = "timestamp", required = true }
+    ]
+  }
+}
+
+resource "cloudflare_pipeline_sink" "obs" {
+  account_id = local.account_id
+  name       = "laundry_tokyo_obs_sink"
+  type       = "r2_data_catalog"
+
+  format = {
+    type        = "parquet",
+    compression = "zstd"
+  }
+  schema = { fields = [] }
+
+  config = {
+    account_id     = local.account_id
+    bucket         = cloudflare_r2_bucket.laundry_tokyo.name
+    namespace      = "laundry"
+    table_name     = "obs"
+    token          = var.laundry_tokyo_catalog_token
+    rolling_policy = { interval_seconds = 300 }
+  }
+
+  depends_on = [
+    cloudflare_r2_data_catalog.laundry_tokyo,
+  ]
+}
+
+resource "cloudflare_pipeline" "obs" {
+  account_id = local.account_id
+  name       = "laundry_tokyo_obs"
+  sql        = "INSERT INTO laundry_tokyo_obs_sink SELECT * FROM laundry_tokyo_obs;"
+
+  depends_on = [
+    cloudflare_pipeline_stream.obs,
+    cloudflare_pipeline_sink.obs
   ]
 }

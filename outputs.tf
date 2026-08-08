@@ -6,6 +6,10 @@ output "laundry_tokyo_kv_namespace_id" {
   value = cloudflare_workers_kv_namespace.laundry_tokyo.id
 }
 
-output "shop_ingest_url" {
+output "laundry_tokyo_shop_ingest_url" {
   value = cloudflare_pipeline_stream.shop.endpoint
+}
+
+output "laundry_tokyo_obs_ingest_url" {
+  value = cloudflare_pipeline_stream.obs.endpoint
 }
