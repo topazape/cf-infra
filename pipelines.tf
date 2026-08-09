@@ -63,6 +63,12 @@ resource "cloudflare_pipeline" "shop" {
   name       = "laundry_tokyo_shop"
   sql        = "INSERT INTO laundry_tokyo_shop_sink SELECT * FROM laundry_tokyo_shop;"
 
+  lifecycle {
+    replace_triggered_by = [
+      cloudflare_pipeline_stream.shop.id
+    ]
+  }
+
   depends_on = [
     cloudflare_pipeline_stream.shop,
     cloudflare_pipeline_sink.shop
@@ -126,6 +132,12 @@ resource "cloudflare_pipeline" "obs" {
   account_id = local.account_id
   name       = "laundry_tokyo_obs"
   sql        = "INSERT INTO laundry_tokyo_obs_sink SELECT * FROM laundry_tokyo_obs;"
+
+  lifecycle {
+    replace_triggered_by = [
+      cloudflare_pipeline_stream.obs.id
+    ]
+  }
 
   depends_on = [
     cloudflare_pipeline_stream.obs,
