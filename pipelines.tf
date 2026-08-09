@@ -91,7 +91,7 @@ resource "cloudflare_pipeline_stream" "obs" {
       { name = "status_code", type = "string", required = false },
       { name = "remaining_minutes", type = "string", required = false },
       { name = "course_code", type = "string", required = false },
-      { name = "created_at", type = "timestamp", required = false },
+      { name = "source_created_at", type = "timestamp", required = false },
       { name = "fetched_at", type = "timestamp", required = true }
     ]
   }
