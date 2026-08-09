@@ -10,6 +10,6 @@ output "laundry_tokyo_shop_ingest_url" {
   value = cloudflare_pipeline_stream.shop.endpoint
 }
 
-output "laundry_tokyo_obs_ingest_url" {
-  value = cloudflare_pipeline_stream.obs.endpoint
+output "laundry_tokyo_status_ingest_url" {
+  value = cloudflare_pipeline_stream.status.endpoint
 }

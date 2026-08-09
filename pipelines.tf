@@ -75,9 +75,9 @@ resource "cloudflare_pipeline" "shop" {
   ]
 }
 
-resource "cloudflare_pipeline_stream" "obs" {
+resource "cloudflare_pipeline_stream" "status" {
   account_id = local.account_id
-  name       = "laundry_tokyo_obs"
+  name       = "laundry_tokyo_status"
 
   http = {
     enabled        = true
@@ -103,9 +103,9 @@ resource "cloudflare_pipeline_stream" "obs" {
   }
 }
 
-resource "cloudflare_pipeline_sink" "obs" {
+resource "cloudflare_pipeline_sink" "status" {
   account_id = local.account_id
-  name       = "laundry_tokyo_obs_sink"
+  name       = "laundry_tokyo_status_sink"
   type       = "r2_data_catalog"
 
   format = {
@@ -118,7 +118,7 @@ resource "cloudflare_pipeline_sink" "obs" {
     account_id     = local.account_id
     bucket         = cloudflare_r2_bucket.laundry_tokyo.name
     namespace      = "laundry"
-    table_name     = "obs"
+    table_name     = "status"
     token          = var.laundry_tokyo_catalog_token
     rolling_policy = { interval_seconds = 300 }
   }
@@ -128,19 +128,19 @@ resource "cloudflare_pipeline_sink" "obs" {
   ]
 }
 
-resource "cloudflare_pipeline" "obs" {
+resource "cloudflare_pipeline" "status" {
   account_id = local.account_id
-  name       = "laundry_tokyo_obs"
-  sql        = "INSERT INTO laundry_tokyo_obs_sink SELECT * FROM laundry_tokyo_obs;"
+  name       = "laundry_tokyo_status"
+  sql        = "INSERT INTO laundry_tokyo_status_sink SELECT * FROM laundry_tokyo_status;"
 
   lifecycle {
     replace_triggered_by = [
-      cloudflare_pipeline_stream.obs.id
+      cloudflare_pipeline_stream.status.id
     ]
   }
 
   depends_on = [
-    cloudflare_pipeline_stream.obs,
-    cloudflare_pipeline_sink.obs
+    cloudflare_pipeline_stream.status,
+    cloudflare_pipeline_sink.status
   ]
 }
