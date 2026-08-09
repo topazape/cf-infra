@@ -87,7 +87,7 @@ resource "cloudflare_pipeline_stream" "obs" {
       { name = "shop_id", type = "string", required = true },
       { name = "machine_id", type = "string", required = true },
       { name = "machine_kind", type = "string", required = false },
-      { name = "status", type = "string", required = false },
+      { name = "status", type = "string", required = true },
       { name = "status_code", type = "string", required = false },
       { name = "remaining_minutes", type = "string", required = false },
       { name = "course_code", type = "string", required = false },
