@@ -95,7 +95,7 @@ resource "cloudflare_pipeline_stream" "status" {
       { name = "machine_kind", type = "string", required = false },
       { name = "status", type = "string", required = true },
       { name = "status_code", type = "string", required = false },
-      { name = "remaining_minutes", type = "string", required = false },
+      { name = "remaining_minutes", type = "int64", required = false },
       { name = "course_code", type = "string", required = false },
       { name = "reported_at", type = "timestamp", required = false },
       { name = "fetched_at", type = "timestamp", required = true }
